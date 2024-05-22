@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BasketAddItemRequestDto {
-    private Long itemId;
-    private Integer itemAmount;
+public class LoginSignUpRequestDto {
+    private String userNickname;
+    private String loginId;
+    private String password;
 }
