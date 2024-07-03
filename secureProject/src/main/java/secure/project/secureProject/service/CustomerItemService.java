@@ -11,11 +11,13 @@ import secure.project.secureProject.domain.*;
 import secure.project.secureProject.dto.request.BasketAddItemRequestDto;
 import secure.project.secureProject.dto.request.CustomerOrderItemRequestDto;
 import secure.project.secureProject.dto.response.*;
-import secure.project.secureProject.enums.OrderState;
+import secure.project.secureProject.domain.enums.OrderState;
 import secure.project.secureProject.exception.ApiException;
 import secure.project.secureProject.exception.ErrorDefine;
 import secure.project.secureProject.repository.*;
 import secure.project.secureProject.util.SecurityUtil;
+
+import secure.project.secureProject.validator.InputValidator;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -36,6 +38,17 @@ public class CustomerItemService {
     private final SecurityUtil securityUtil;
 
     public Map<String, Object> selectCustomerItem(Integer page, Integer size, String latest, String price,String searchName){
+        System.err.println(searchName);
+
+        if(searchName != null && InputValidator.lengthNotInRange(searchName, 0, 30)) {
+            throw new ApiException(ErrorDefine.INVALID_ARGUMENT);
+        }
+        if(searchName != null && InputValidator.containsAnySpecialCharacter(searchName)){
+            throw new ApiException(ErrorDefine.INVALID_ARGUMENT);
+        }
+
+        System.err.println("nono");
+
         Sort sort = Sort.by(
                 new Sort.Order(Sort.Direction.fromString(latest), "updateAt"),
                 new Sort.Order(Sort.Direction.fromString(price), "itemPrice")
